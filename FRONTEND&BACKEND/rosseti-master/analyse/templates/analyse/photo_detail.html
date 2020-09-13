@@ -1,0 +1,377 @@
+{% extends "base_analyse.html" %}
+{% load i18n %}
+
+{% block style %}
+    <style>
+        .pic-container {
+            /* As large as it needs to be */
+            width: 1500px;
+        }
+    </style>
+
+
+{% endblock %}
+{% block page_title %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="{% url 'user_account_url' %}">{% trans "Home" %}</a></li>
+        <li class="breadcrumb-item active">{{ photo.pole.lep.region.title }}</li>
+        <li class="breadcrumb-item active">{{ photo.pole.lep.title }}</li>
+        <li class="breadcrumb-item active">{{ photo.pole.title }}</li>
+        <li class="breadcrumb-item active"
+            title="{{ photo.original_name }}">{{ photo.original_name|truncatechars:10 }}</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{% trans "Photo information" %}</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i
+                                class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+
+                        <div class="col-md-4 ">
+                            <strong>{% trans "Region" %}</strong>
+                            <br>
+                            <button class="btn btn-default">{{ photo.pole.lep.region.title }}</button>
+
+                        </div>
+
+                        <div class="col-md-4 ">
+                            <strong>{% trans "LEP" %}</strong>
+                            <br>
+                            <button class="btn btn-default">{{ photo.pole.lep.title }}</button>
+                        </div>
+
+                        <div class="col-md-4 ">
+                            <strong>{% trans "Pole" %}</strong>
+                            <br>
+                            <button class="btn btn-default">{{ photo.pole.title }}</button>
+                        </div>
+                    </div>
+                    <!-- /.row -->
+                    <div class="row mt-4">
+                        <div class="col-md-4">
+                            <strong>{% trans "Uploaded date" %}</strong>
+                            <br>
+                            <button class="btn btn-default">{{ photo.created_at }}</button>
+                        </div>
+                        <div class="col-md-4">
+                            <strong>{% trans "Uploaded by" %}</strong>
+                            <br>
+                            <button class="btn btn-default">{{ user_full_name }}</button>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12 text-right">
+                            <button class="btn btn-default">{% trans "Check" %}</button>
+                        </div>
+                    </div>
+
+                    <div class="row mt-2">
+                        <div class="col-md-12">
+                            <div class="card {% if line_broken == None %}card-default{% elif line_broken == 0 %} card-success {% elif line_broken == 1 %} card-danger {% endif %} collapsed-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Обрыв провода или грозотроса</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                                class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <!-- /.card-tools -->
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <span style="font-size: 20px">{% if line_broken == None %}
+                                        {{ analise }}{% elif line_broken == 0 %}
+                                        {{ not_detected }}{% elif line_broken == 1 %}{{ probably }}{% endif %}</span>
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="card {% if vibration_damper_displacement == None %}card-default{% elif vibration_damper_displacement == 0 %} card-success {% elif vibration_damper_displacement == 1 %} card-danger {% endif %} collapsed-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Смещение гасителя вибрации провода</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                                class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <!-- /.card-tools -->
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <span style="font-size: 20px">{% if vibration_damper_displacement == None %}
+                                        {{ analise }}{% elif vibration_damper_displacement == 0 %}
+                                        {{ not_detected }}{% elif vibration_damper_displacement == 1 %}{{ probably }}{% endif %}</span>
+
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-md-12">
+                            <div class="card {% if garland_problem == None %}card-default{% elif garland_problem == 0 %} card-success {% elif garland_problem == 1 %} card-danger {% endif %} collapsed-card">
+                                <div class="card-header">
+                                    <h3 class="card-title">Отсутствие изоляторов в гирлянде</h3>
+
+                                    <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                                class="fas fa-plus"></i>
+                                        </button>
+                                    </div>
+                                    <!-- /.card-tools -->
+                                </div>
+                                <!-- /.card-header -->
+                                <div class="card-body">
+                                    <span style="font-size: 20px">
+                                        {% if garland_problem == None %}
+                                            {{ analise }}
+                                        {% elif garland_problem == 0 %}
+                                            {{ not_detected }}
+                                        {% elif garland_problem == 1 %}
+                                            {{ probably }}
+                                        {% endif %}
+                                    </span>
+
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <form action="" method="post">
+                                {% csrf_token %}
+                                <div class="form-group">
+
+
+                                    <label for="description" class="mt-2">{% trans "Comment to photo" %}</label>
+                                    <textarea class="form-control" id="description" name="description"
+                                              rows="3">{{ photo.description|default_if_none:"" }}</textarea>
+
+                                    <input type="submit" class="form-control mt-2 btn btn-default" id="upload"
+                                           name="upload" value="{% trans "Save" %}">
+                                </div>
+
+                            </form>
+                        </div>
+                    </div>
+
+                    <div class="row mt-3">
+                        <div class="col-md-12">
+                            <strong>{% trans "Download reports in next formats" %}</strong>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button"
+                                    class="btn btn-block btn-outline-info btn-lg"><i
+                                    class="fas fa-3x fa-file-csv"></i></button>
+                        </div>
+                        <div class="col-md-4">
+                            <button type="button"
+                                    class="btn btn-block btn-outline-info btn-lg"><i class="fas fa-3x fa-file-pdf"></i>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+
+                <!-- /.footer -->
+            </div>
+        </div>
+
+
+        <div class="col-md-6 ">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{% trans "Photo" %}</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i
+                                class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-12">
+
+                            ​
+                            <picture>
+                                {% if result_link == None %}
+                                    <img src="{{ photo.photo_link }}" class="img-fluid img-thumbnail" alt="...">
+                                {% else %}
+                                    <img src="{{ result_link }}" class="img-fluid img-thumbnail" alt="...">
+                                {% endif %}
+                            </picture>
+
+
+                        </div>
+                    </div>
+                    <!-- /.row -->
+
+                    <div class="row" style="padding-bottom: 20px">
+                        <div class="col-md-12 mt-4">
+                            <section style="overflow: scroll;  margin: 0 auto; white-space: nowrap;">
+                                <div class="pic-container">
+                                    <div class="pic-row">
+                                        {% for pole_photo in pole_photos %}
+                                            <a href="{% url 'photo_detail_url' photo_id=pole_photo.id %}">
+                                                <img title="{{ pole_photo.description }}" height="100px"
+                                                     src="{{ pole_photo.image.url }}">
+                                            </a>
+
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </section>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+
+                <!-- /.footer -->
+            </div>
+        </div>
+
+
+    </div>
+
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{% trans "Map" %}</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i
+                                class="fas fa-times"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="maximize"><i class="fas fa-expand"></i></button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+
+                    <div class="col-md-12">
+                        <div id="map" style="height: 400px"></div>
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">{% trans "Report" %}</h3>
+
+                    <div class="card-tools">
+                        <button type="button" class="btn btn-tool" data-card-widget="collapse"><i
+                                class="fas fa-minus"></i>
+                        </button>
+                        <button type="button" class="btn btn-tool" data-card-widget="remove"><i
+                                class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+                <!-- /.card-header -->
+                <div class="card-body">
+
+                    <div class="col-md-12">
+
+
+
+                    </div>
+
+                </div>
+                <!-- /.card-body -->
+
+            </div>
+        </div>
+    </div>
+
+
+
+{% endblock %}
+
+{% block script %}
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU&amp;apikey=36cd86e6-7a95-48e3-9f04-ff4fdb8826eb
+" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        // Функция ymaps.ready() будет вызвана, когда
+        // загрузятся все компоненты API, а также когда будет готово DOM-дерево.
+        ymaps.ready(init);
+
+        function init() {
+            var latitude = "{{ latitude }}"
+            var longitude = "{{ longitude }}"
+            console.log(latitude)
+            console.log(longitude)
+            // Создание карты.
+            var myMap = new ymaps.Map("map", {
+                // Координаты центра карты.
+                // Порядок по умолчанию: «широта, долгота».
+                // Чтобы не определять координаты центра карты вручную,
+                // воспользуйтесь инструментом Определение координат.
+                center: [latitude, longitude],
+
+                // Уровень масштабирования. Допустимые значения:
+                // от 0 (весь мир) до 19.
+                zoom: 12
+            });
+
+            myMap.geoObjects
+                .add(new ymaps.Placemark([latitude, longitude], {
+                    balloonContent: '<strong>{{ photo.pole.title }}</strong>'
+                }));
+        }
+    </script>
+{% endblock %}

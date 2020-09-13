@@ -1,0 +1,13 @@
+.idea/
+media/users/*
+media/lep_small/
+media/lep_images/
+!media/users/templates
+### Django ###
+*.log
+*.pot
+*.pyc
+__pycache__/
+.DS_Store
+venv/
+lep/settings_local.py

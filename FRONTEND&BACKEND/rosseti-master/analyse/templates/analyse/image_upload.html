@@ -1,0 +1,76 @@
+{% extends "base_analyse.html" %}
+{% load i18n %}
+
+{% block page_title %}
+
+{% endblock %}
+
+{% block breadcrumb %}
+    <ol class="breadcrumb float-sm-right">
+        <li class="breadcrumb-item"><a href="{% url 'user_account_url' %}">{% trans "Home" %}</a></li>
+        <li class="breadcrumb-item active">{% trans "Photo upload" %}</li>
+    </ol>
+{% endblock %}
+
+{% block content %}
+
+
+
+    <!--
+    <form enctype="multipart/form-data" action="http://89.223.95.49:8887/upload" method="post">
+          <input type="file" name="files" multiple />
+          <input type="submit" value="upload" />
+    </form>
+    -->
+
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title">{% trans "Photo upload form" %}</h3>
+
+            <div class="card-tools">
+                <button type="button" class="btn btn-tool" data-card-widget="collapse"><i class="fas fa-minus"></i>
+                </button>
+                <button type="button" class="btn btn-tool" data-card-widget="remove"><i class="fas fa-times"></i>
+                </button>
+            </div>
+        </div>
+        <!-- /.card-header -->
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-6">
+                    <form enctype="multipart/form-data" action="" method="post">
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <label for="files">{% trans "Upload photos" %}</label>
+                            <input type="file" id="files" name="files" class="form-control-file" required multiple>
+
+                            <label for="lep_name" class="mt-2">{% trans "LEP name" %}</label>
+                            <input type="text" class="form-control" id="lep_name" name="lep_name"
+                                   placeholder="{% trans "LEP name" %}" required>
+
+                            <label for="description" class="mt-2">{% trans "Description" %}</label>
+                            <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+
+                            <input type="submit" class="form-control mt-2 btn btn-primary" id="upload" name="upload" value="{% trans "Upload" %}">
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+            <!-- /.row -->
+        </div>
+        <!-- /.card-body -->
+
+        <!-- /.footer -->
+    </div>
+    <!-- /.card -->
+
+{% endblock %}
+
+{% block script %}
+    <!--
+    <script>
+    const csrftoken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+    </script>
+    -->
+{% endblock %}
